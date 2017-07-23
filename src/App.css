@@ -1,0 +1,56 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #222;
+  height: 70px;
+  padding: 20px;
+  color: white;
+}
+
+.App-header h2 {
+  margin-top: 0;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.App-body {
+  text-align: left;
+  width: 80%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+.input-line {
+  height: 30px;
+}
+
+.input-line label {
+  line-height: 35px;
+  min-width: 80px;
+}
+
+.submit {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.submit button {
+  margin-top: 20px;
+}
+
+.token {
+  font-size: 20px;
+  margin: 10px;
+  line-height: 40px;
+  display: inline-block;
+}
+
+.token a {
+  text-decoration: none;
+  color: white;
+}
