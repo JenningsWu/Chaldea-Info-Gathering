@@ -171,6 +171,7 @@ class MyForm extends Component {
 
       this.setState({
         loading: false,
+        verified: s.get('verified'),
         ...values,
       })
 
@@ -225,6 +226,7 @@ class MyForm extends Component {
       loading,
       mssg,
       disabled,
+      verified,
     } = this.state
     if (loading) {
       return (
@@ -234,6 +236,7 @@ class MyForm extends Component {
 
     return (
       <Form horizontal onSubmit={this._submit}>
+        <h4>wiki 链接：<a target="_blank" href={'http://fgowiki.com/guide/petdetail/' + this.state.id}>fgowiki.com/guide/petdetail/{this.state.id}</a></h4>
         <Table striped bordered condensed hover>
           <tbody>
               {
@@ -244,21 +247,25 @@ class MyForm extends Component {
                     label={EN2CN[k]}
                     // value={id}
                     value={this.state[k]}
-                    disabled={disabled}
+                    disabled={verified || disabled}
                     onChange={this._handleInputChange}
                   />
                 ))
               }
           </tbody>
         </Table>
-        <div className="submit">
-          <Button bsSize="large" type="submit" style={{marginRight: '20px'}}>
-            确认
-          </Button>
-          <Button bsSize="large" onClick={() => this.setState({ disabled : !disabled })}>
-            {disabled ? '修改' : '锁定'}
-          </Button>
-        </div>
+          {
+            verified ? null : (
+              <div className="submit">
+                <Button bsSize="large" type="submit" style={{marginRight: '20px'}}>
+                  确认
+                </Button>
+                <Button bsSize="large" onClick={() => this.setState({ disabled : !disabled })}>
+                  {disabled ? '修改' : '锁定'}
+                </Button>
+              </div>
+            )
+          }
       </Form>
     )
   }

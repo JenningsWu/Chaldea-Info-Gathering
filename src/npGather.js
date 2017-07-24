@@ -1,5 +1,7 @@
 import React, { Component, PureComponent } from 'react'
+import Select from 'react-select';
 
+// Be sure to include styles at some point, probably during your bootstrapping
 import {
   Form,
   Row,
@@ -30,9 +32,36 @@ class MyForm extends Component {
   constructor() {
     super()
     this.state = {
-      id: 0,
-      name: '',
+      loading: false,
+      disabled: false,
+      mssg: 'Loading',
     }
+  }
+
+  componentDidMount() {
+    // const query = new AV.Query('Servant')
+    // query.equalTo('id', pad(parseInt(this.props.id), 3))
+    // query.find().then((results) => {
+    //   if (results.length != 1) {
+    //     console.log(pad(parseInt(this.props.id), 3), results)
+    //     return
+    //   }
+    //   const s = this.servant = results[0]
+    //   console.log("get", s)
+    //   const values = {}
+    //   for (const k of basicList) {
+    //     values[k] = s.get(k)
+    //   }
+    //
+    //   this.setState({
+    //     loading: false,
+    //     verified: s.get('verified'),
+    //     ...values,
+    //   })
+    //
+    // }, (err) => {
+    //   console.log(err)
+    // })
   }
 
   _handleInputChange = event => {
@@ -45,6 +74,10 @@ class MyForm extends Component {
     })
   }
 
+  _logChange(val) {
+    console.log("Selected: " + JSON.stringify(val));
+  }
+
   _submit = event => {
     event.preventDefault()
     alert(JSON.stringify(this.state, null, 2))
@@ -52,223 +85,39 @@ class MyForm extends Component {
 
   render() {
     const {
-      name,
-      id,
+      loading,
+      mssg,
+      disabled,
+      verified,
     } = this.state
+
+    if (loading) {
+      return (
+        <p>{mssg}</p>
+      )
+    }
+
+    const options = [
+      {
+        label: '中文',
+        value: 1,
+      },
+      {
+        label: '中文1',
+        value: 2,
+      },
+    ]
 
     return (
       <Form horizontal onSubmit={this._submit}>
-        <FieldGroup
-          name="id"
-          type="number"
-          label="ID"
-          // value={id}
-          value={this.props.id}
-          disabled
-          onChange={this._handleInputChange}
+        <h4>wiki 链接：<a target="_blank" href={'http://fgowiki.com/guide/petdetail/' + this.props.id}>fgowiki.com/guide/petdetail/{this.props.id}</a></h4>
+        <Select
+          name="form-field-name"
+          value="one"
+          options={options}
+          onChange={this.logChange}
+          matchProp="label"
         />
-        <FieldGroup
-          name="name"
-          type="text"
-          label="从者名"
-          value={name}
-          onChange={this._handleInputChange}
-        />
-        {/* <FormGroup className="input-line">
-          <Col xs={12} sm={2}>
-            <ControlLabel>稀有度</ControlLabel>
-          </Col>
-          <Col xs={12} sm={10}>
-            <FormControl
-              componentClass="select"
-              placeholder="稀有度"
-              name="rarity"
-              value={rarity}
-              onChange={this._handleInputChange}
-            >
-              <option value={-1}>特殊</option>
-              <option value={0}>零星</option>
-              <option value={1}>一星</option>
-              <option value={2}>二星</option>
-              <option value={3}>三星</option>
-              <option value={4}>四星</option>
-              <option value={5}>五星</option>
-            </FormControl>
-          </Col>
-        </FormGroup>
-        <FormGroup>
-          <Col sm={3}>
-            <FieldGroup
-              name="startATK"
-              type="number"
-              label="初始 ATK"
-              value={startATK}
-              onChange={this._handleInputChange}
-            />
-          </Col>
-          <Col xs={3}>
-            <FieldGroup
-              name="endATK"
-              type="number"
-              label="满级 ATK"
-              value={endATK}
-              onChange={this._handleInputChange}
-            />
-          </Col>
-          <Col xs={3}>
-            <FieldGroup
-              name="startHP"
-              type="number"
-              label="初始 HP"
-              value={startHP}
-              onChange={this._handleInputChange}
-            />
-          </Col>
-          <Col xs={3}>
-            <FieldGroup
-              name="endHP"
-              type="number"
-              label="满级 HP"
-              value={endHP}
-              onChange={this._handleInputChange}
-            />
-          </Col>
-        </FormGroup>
-        <FormGroup>
-          <Col xs={3}>
-            <FieldGroup
-              name="illustrator"
-              type="text"
-              placeholder="Illustrator"
-              label="画师"
-              value={illustrator}
-              onChange={this._handleInputChange}
-            />
-          </Col>
-          <Col xs={3}>
-            <FieldGroup
-              name="cv"
-              type="text"
-              label="配音"
-              placeholder="Voice Actor"
-              value={cv}
-              onChange={this._handleInputChange}
-            />
-          </Col>
-          <Col xs={3} className="input-line">
-            <Col sm={2} xs={12} style={{minWidth: 80}}>
-              <ControlLabel style={{ textAlign: 'center' }}>属性</ControlLabel>
-            </Col>
-            <Col sm={10} xs={12}>
-              <FormControl
-                componentClass="select"
-                placeholder="attribute"
-                name="attribute"
-                value={attribute}
-                onChange={this._handleInputChange}
-              >
-                <option value={0}>人</option>
-                <option value={1}>天</option>
-                <option value={2}>地</option>
-                <option value={3}>星</option>
-                <option value={4}>兽</option>
-              </FormControl>
-            </Col>
-          </Col>
-          <Col xs={3}>
-            <FieldGroup
-              label="阵营"
-              name="alignment"
-              type="text"
-              placeholder="Alignment"
-              value={alignment}
-              onChange={this._handleInputChange}
-            />
-          </Col>
-        </FormGroup>
-        <FormGroup>
-          <Col xs={2}>
-            <ControlLabel>色卡</ControlLabel>
-          </Col>
-          <Col sm={10} xs={10}>
-            <CardsInput
-              onChange={this._handleInputChange}
-              name="cards"
-              value={cards}
-              placeholder={['蓝卡数', '红卡数', '绿卡数']}
-            />
-          </Col>
-
-          <Col sm={12} xs={6}>
-            <CardsInput
-              onChange={this._handleInputChange}
-              name="hits"
-              value={hits}
-              placeholder={['蓝卡 hit 数', '红卡 hit 数', '绿卡 hit 数', 'extra hit 数']}
-            />
-          </Col>
-
-
-          <Col sm={12} xs={6}>
-            <CardsInput
-              onChange={this._handleInputChange}
-              name="charge"
-              value={charge}
-              placeholder={['绿卡 NP 获取率', '蓝卡 NP 获取率', '红卡 NP 获取率', 'extra NP 获取率']}
-            />
-          </Col>
-        </FormGroup>
-
-        <FormGroup>
-          <Col xs={3}>
-            <FieldGroup
-              name="starAbsorption"
-              type="number"
-              label="暴击权重"
-              placeholder="starAbsorption"
-              value={starAbsorption}
-              onChange={this._handleInputChange}
-            />
-          </Col>
-          <Col xs={3}>
-            <FieldGroup
-              name="starGeneration"
-              type="number"
-              label="掉星率"
-              placeholder="starGeneration"
-              value={starGeneration}
-              onChange={this._handleInputChange}
-            />
-          </Col>
-            <Col xs={3}>
-              <FieldGroup
-                name="npChargeATK"
-                type="number"
-                label="宝具 NP 获取率"
-                placeholder="npChargeATK"
-                value={npChargeATK}
-                onChange={this._handleInputChange}
-              />
-            </Col>
-            <Col xs={3}>
-              <FieldGroup
-                name="npChargeDEF"
-                type="number"
-                label="受击 NP 获取率"
-                placeholder="npChargeDEF"
-                value={npChargeDEF}
-                onChange={this._handleInputChange}
-              />
-            </Col>
-        </FormGroup>
-        <FieldGroup
-          name="traits"
-          type="text"
-          label="特性"
-          placeholder="traits"
-          value={traits}
-          onChange={this._handleInputChange}
-        /> */}
         <div className="submit">
           <Button type="submit">
             Submit
