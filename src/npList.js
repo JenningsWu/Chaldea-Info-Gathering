@@ -27,7 +27,7 @@ class MyForm extends Component {
       const todo = []
       const done = []
       for (const servant of results) {
-        const arr = servant.get('verified') === 0 ? todo : done
+        const arr = servant.get('npVerified') === 0 ? todo : done
         arr.push({
           id: servant.get('id'),
           name: servant.get('name'),
@@ -56,12 +56,12 @@ class MyForm extends Component {
 
     return (
       <div>
-        <PageHeader>待捉虫</PageHeader>
+        <PageHeader>待填写</PageHeader>
         <div>
         {
           todo.map(({ id, name }) => (
             <Label key={id} bsStyle="warning" className="token">
-              <Link to={'/servant/' + id}>{name}</Link>
+              <Link to={'/np/' + id}>{name}</Link>
             </Label>
           ))
         }
@@ -71,7 +71,7 @@ class MyForm extends Component {
         {
           done.map(({ id, name }) => (
             <Label key={id} bsStyle="primary" className="token">
-              <Link to={'/servant/' + id}>{name}</Link>
+              <Link to={'/np/' + id}>{name}</Link>
             </Label>
           ))
         }

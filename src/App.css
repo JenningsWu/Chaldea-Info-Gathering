@@ -25,6 +25,10 @@
   padding-top: 20px;
 }
 
+.App-body.NP {
+  max-width: 1200px;
+}
+
 .input-line {
   height: 30px;
 }
@@ -53,4 +57,15 @@
 .token a {
   text-decoration: none;
   color: white;
+}
+
+.inline-input {
+  width: calc(100% - 100px);
+  display: inline-block;
+  margin-left: 20px;
+  vertical-align: middle;
+}
+
+.button-add {
+  margin-left: 10px;
 }

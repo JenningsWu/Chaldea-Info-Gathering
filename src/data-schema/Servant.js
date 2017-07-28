@@ -43,10 +43,10 @@ export default class Servant extends AV.Object {
     this.set('deathResist', 0)
     this.set('traits', [])
 
-    this.set('skill1', [])
-    this.set('skill2', [])
-    this.set('skill3', [])
-    this.set('NP', [])
+    this.set('skill1', '[]')
+    this.set('skill2', '[]')
+    this.set('skill3', '[]')
+    this.set('NP', '[]')
   }
 }
 

@@ -5,14 +5,8 @@ import { withRouter } from 'react-router-dom'
 
 import {
   Form,
-  Row,
-  Col,
-  Clearfix,
-  FormGroup,
-  Checkbox,
   ControlLabel,
   FormControl,
-  HelpBlock,
   Button,
   Table,
 } from 'react-bootstrap'
@@ -83,7 +77,7 @@ class MultipleInput extends Component {
     const { target } = event
     const value = target.value
     const name = target.name.split('+')[0]
-    const idx = parseInt(target.name.split('+')[1])
+    const idx = parseInt(target.name.split('+')[1], 10)
     const next = [...this.props.value]
     next[idx] = value
     this.props.onChange({
@@ -156,10 +150,10 @@ class MyForm extends Component {
 
   componentDidMount() {
     const query = new AV.Query('Servant')
-    query.equalTo('id', pad(parseInt(this.props.id), 3))
+    query.equalTo('id', pad(parseInt(this.props.id, 10), 3))
     query.find().then((results) => {
-      if (results.length != 1) {
-        console.log(pad(parseInt(this.props.id), 3), results)
+      if (results.length !== 1) {
+        console.log(pad(parseInt(this.props.id, 10), 3), results)
         return
       }
       const s = this.servant = results[0]
@@ -183,9 +177,9 @@ class MyForm extends Component {
   _parseInput = (name, value) => {
     if (name in shouldBeInteger) {
       if (Array.isArray(value)) {
-        return value.map(v => parseInt(v))
+        return value.map(v => parseInt(v, 10))
       }
-      return parseInt(value)
+      return parseInt(value, 10)
     } else if (name in shouldBeFloat) {
       if (Array.isArray(value)) {
         return value.map(v => parseFloat(v))
