@@ -131,6 +131,20 @@ export class Effect extends Component {
     }
     if (name === 'value') {
       next = next.map((v) => v[v.length - 1] === '.' ? v : parseFloat(v))
+      if (idx === 1 && next[1][next[1].length - 1] !== '.') {
+        const diff = next[1] - next[0]
+        if (next.length === 5) {
+          for (let i = 2; i < 5; i++) {
+            next[i] = next[0] + diff * i
+          }
+        } else if (next.length === 10) {
+          for (let i = 2; i < 9; i++) {
+            next[i] = next[0] + diff * i
+          }
+          next[9] = next[8] + diff * 2
+        }
+        next = (next.map((v, i) => i < 2 ? v : parseFloat(v.toFixed(4))))
+      }
     }
     console.log(name, next)
     this.setState({

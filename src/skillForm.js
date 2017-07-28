@@ -175,7 +175,7 @@ export class ClassSkill extends Component {
     this.state = {
       name: data['name'] || '',
       lv: data['lv'] || '',
-      effect: data['effect'] || {},
+      effect: data['effect'] || { duration: 99999 },
     }
   }
 

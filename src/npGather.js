@@ -174,7 +174,7 @@ class MyForm extends Component {
                   <td colSpan="2">
                     <ControlLabel>{n}</ControlLabel>
                     <Button bsStyle="primary" className="button-add" onClick={() =>
-                      this.setState({ [n]: [...skill[idx], {}] })
+                      this.setState({ [n]: [...skill[idx], ...[skill[idx][skill[idx].length - 1]|| {}]] })
                     }>+</Button>
                   </td>
                 </tr>
@@ -205,7 +205,7 @@ class MyForm extends Component {
         }
         <h5>宝具
           <Button bsStyle="primary" className="button-add" onClick={() =>
-            this.setState({ np: [...np, {}] })
+            this.setState({ np: [...np, ...[np[np.length - 1] || {}]] })
           }>+</Button>
         </h5>
         {
