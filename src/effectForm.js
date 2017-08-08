@@ -15,6 +15,7 @@ import {
   detail,
   traitList,
   skillDuration,
+  skillDurationTime,
   skillEffectiveTime,
   npEffectType,
 } from './data-schema/Skill'
@@ -29,6 +30,7 @@ const rawOptions = {
 
 const rawOptions2 = {
   skillDuration,
+  skillDurationTime,
   skillEffectiveTime,
   npEffectType,
 }
@@ -110,12 +112,15 @@ export class Effect extends Component {
       id: data['id'] || '000000000000',
       value: data['value'] || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       duration: data['duration'] || 0,
+      durationTime: data['durationTime'] || 0,
       effectiveTime: data['effectiveTime'] || -1,
       phaseID: data['phaseID'] || 0,
+      probability: data['probability'] || [100, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     }
     if (props.type === 'np') {
       this.state['type'] = data['type'] || 0
       this.state.value = data['value'] || [0, 0, 0, 0, 0]
+      this.state.probability = data['probability'] || [100, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     }
   }
 
@@ -129,7 +134,7 @@ export class Effect extends Component {
     } else {
       next[idx] = target.value
     }
-    if (name === 'value') {
+    if (name === 'probability' || name === 'value') {
       next = next.map((v) => v[v.length - 1] === '.' ? v : parseFloat(v))
       if (idx === 1 && next[1][next[1].length - 1] !== '.') {
         const diff = next[1] - next[0]
@@ -146,6 +151,8 @@ export class Effect extends Component {
         next = (next.map((v, i) => i < 2 ? v : parseFloat(v.toFixed(4))))
       }
     }
+
+
     console.log(name, next)
     this.setState({
       [name]: next
@@ -174,6 +181,9 @@ export class Effect extends Component {
 
   _assemble({ value }, idx) {
     let { id } = this.state
+    if (value === undefined) {
+      return
+    }
     id = assemble(id, value, idx)
     this._handleInputChange({
       target: {
@@ -189,8 +199,10 @@ export class Effect extends Component {
       id,
       value,
       duration,
+      durationTime,
       effectiveTime,
       phaseID,
+      probability
     } = this.state
 
     const IDs = disassemble(id)
@@ -286,6 +298,22 @@ export class Effect extends Component {
                 clearable={false}
               />
             </td>
+            <td>durationTime</td>
+            <td>
+              <Select
+                name={'durationTime+-1'}
+                value={durationTime}
+                options={options.skillDurationTime}
+                onChange={(val) => this._onSelectChange(val, 'durationTime+-1')}
+                matchProp="label"
+                clearable={false}
+              />
+            </td>
+            <td colSpan="2" rowSpan="2">
+              <Button bsStyle="danger" onClick={this.props.onDelete}>-</Button>
+            </td>
+          </tr>
+          <tr>
             <td>effectiveTime</td>
             <td>
               <Select
@@ -306,10 +334,40 @@ export class Effect extends Component {
                 onChange={this._handleInputChange}
               />
             </td>
-            <td>
-              <Button bsStyle="danger" onClick={this.props.onDelete}>-</Button>
-            </td>
           </tr>
+          <tr>
+            <td rowSpan={value.length > 5 ? '2' : '1'}>probability</td>
+            {
+              Array(5).fill('').map((_, idx) => (
+                <td key={idx}>
+                  <FormControl
+                    name={'probability+'+idx}
+                    type='float'
+                    value={probability[idx]}
+                    onChange={this._handleInputChange}
+                  />
+                </td>
+              ))
+            }
+          </tr>
+          {
+            value.length > 5 ? (
+              <tr>
+                {
+                  Array(5).fill('').map((_, idx) => (
+                    <td key={idx}>
+                      <FormControl
+                        name={'probability+'+ (idx + 5)}
+                        type='float'
+                        value={probability[idx + 5]}
+                        onChange={this._handleInputChange}
+                      />
+                    </td>
+                  ))
+                }
+              </tr>
+            ) : null
+          }
         </tbody>
       </Table>
     )

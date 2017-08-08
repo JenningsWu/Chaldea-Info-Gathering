@@ -116,7 +116,9 @@ class MyForm extends Component {
     })
     this.servant.save().then((obj) => {
       console.log(obj)
-      this.props.history.push('/np')
+      // this.props.history.push('/np')
+      this.props.history.push('/np/' + (parseInt(this.props.id) + 1))
+      window.location.reload()
     }, (err) => {
       console.log(err)
     })
@@ -203,21 +205,7 @@ class MyForm extends Component {
             </Table>
           ))
         }
-        <h5>宝具
-          <Button bsStyle="primary" className="button-add" onClick={() =>
-            this.setState({ np: [...np, ...[np[np.length - 1] || {}]] })
-          }>+</Button>
-        </h5>
-        {
-          np.map((v, i) => (
-            <NP
-              key={i}
-              name={"np+" + i}
-              data={v}
-              onChange={this._handleInputChange}
-            />
-          ))
-        }
+
         <div>
           <h5>
             职介技能
@@ -243,6 +231,22 @@ class MyForm extends Component {
             ))
           }
         </div>
+
+        <h5>宝具
+          <Button bsStyle="primary" className="button-add" onClick={() =>
+            this.setState({ np: [...np, ...[np[np.length - 1] || {}]] })
+          }>+</Button>
+        </h5>
+        {
+          np.map((v, i) => (
+            <NP
+              key={i}
+              name={"np+" + i}
+              data={v}
+              onChange={this._handleInputChange}
+            />
+          ))
+        }
 
           {
             false ? null : (
